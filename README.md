@@ -23,3 +23,5 @@ Implementation of additional features such as commenting on posts and direct mes
 Optimization of the program's performance for larger user groups.
 Incorporation of user feedback to improve the user experience.
 Overall, this project is a great example of how Python can be used to create functional, user-friendly applications with a simple interface.
+
+Note: Make sure all the files in the same folder after downloading. If any file is missing the code will give error. 
