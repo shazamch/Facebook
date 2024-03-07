@@ -23,7 +23,7 @@ class Facebook:
         access.execute('''CREATE TABLE Block(Username string, blocked string)''')
         access.execute('''CREATE TABLE R_posts(Username string,sender string,post string)''')
         access.execute('''CREATE TABLE all_posts(Username string,P_N string,post string,commonts string,private string,blocked list)''')
-        access.execute('''CREATE TABLE R_comments(Username string,post string, comment string)''')
+        access.execute('''CREATE TABLE R_comments(Username string,sender string ,post string, comment string)''')
         access.execute('''CREATE TABLE all_pages(name string,owner string,likes string)''')
         access.execute('''CREATE TABLE liked_pages(Username string, page string)''')
         access.execute('''CREATE TABLE R_page_posts(Username string, receiver string ,page string,post string)''')
@@ -121,7 +121,7 @@ class manage_friends:
         return friend_list
 class post_comment:
     def my_posts(self,username,root):
-        customtkinter.CTkLabel(root, text = 'My Posts',text_color="green",text_font=('BOLD',12),width=100, height=30,corner_radius=20,fg_color=("gray70", "gray25")).grid(row=1, column=3, padx=20, pady=20)
+        customtkinter.CTkLabel(root, text = 'My Posts',text_color="green",font=('BOLD',12),width=100, height=30,corner_radius=20,fg_color=("gray70", "gray25")).grid(row=1, column=3, padx=20, pady=20)
         connection,access = Facebook.open_sql(self);counter = 0; column = 1;row = 1;comments1 = []
         access.execute("SELECT P_N,post,commonts FROM all_posts WHERE Username = ?",(username,)); lst = access.fetchall()
         for a in lst:
@@ -328,12 +328,12 @@ class FB_search:
                 root = GUI.create_window(self,"400x300",'User Found')
                 for i in lst:
                     x = header[i]+'  :  '+user_info[i]
-                    customtkinter.CTkLabel(root,text=x,text_font = ('ITALIC',15)).grid(row = r,column = 0);r += 1
+                    customtkinter.CTkLabel(root,text=x,font = ('ITALIC',15)).grid(row = r,column = 0);r += 1
                 customtkinter.CTkButton(master=root, text="Posts", width=70, height=40, border_width=3,
                                         corner_radius=7, compound="bottom", border_color="#D35B58", fg_color=("gray84", "gray25"), hover_color="#C77C78",
                                         command=lambda:FB_search.show_post(self,username,Find,root)).grid(row=r +1 , column=0)
             if Find in friend_list:
-                    customtkinter.CTkLabel(root,text='You are friends.',text_font = ('ITALIC',15)).grid(row = r,column = 0);r += 1
+                    customtkinter.CTkLabel(root,text='You are friends.',font = ('ITALIC',15)).grid(row = r,column = 0);r += 1
             else:
                 customtkinter.CTkButton(master=root, text="Send Request", width=70, height=40, border_width=3,
                                         corner_radius=7, compound="bottom", border_color="#D35B58", fg_color=("gray84", "gray25"), hover_color="#C77C78",
@@ -500,7 +500,7 @@ class pages:
         Facebook.close_sql(self,connection)    
     def my_posts(self,username):
         root = GUI.create_window(self,'700x500','My Posts')
-        customtkinter.CTkLabel(root, text = 'My Posts',text_color="green",text_font=('BOLD',12),width=100, height=30,corner_radius=20,fg_color=("gray70", "gray25")).grid(row=1, column=3, padx=20, pady=20)
+        customtkinter.CTkLabel(root, text = 'My Posts',text_color="green",font=('BOLD',12),width=100, height=30,corner_radius=20,fg_color=("gray70", "gray25")).grid(row=1, column=3, padx=20, pady=20)
         connection,access = Facebook.open_sql(self);counter = 0; column1 = 1;row1 = 1;comments1 = [];posts = []
         access.execute("SELECT post,comments,page FROM all_page_posts WHERE Username = ?",(username,)); lst = access.fetchall()
         for a in lst:
@@ -571,7 +571,7 @@ class notifications:
         page_posts = pages.check_post(self,username,0,1)
         messeges = messenger.check_messege(self,username,0,1);row  = 2
         total = str(requests+posts+comments+messeges+request_accepted+page_comments+page_posts)+' new notifocations.'
-        customtkinter.CTkLabel(root, text = total,text_color="green",text_font=('BOLD',12),width=100, height=30,corner_radius=20,fg_color=("gray70", "gray25")).grid(row=1, column=0, padx=20, pady=20)          
+        customtkinter.CTkLabel(root, text = total,text_color="green",font=('BOLD',12),width=100, height=30,corner_radius=20,fg_color=("gray70", "gray25")).grid(row=1, column=0, padx=20, pady=20)          
         if requests+posts+comments+messeges+request_accepted != 0:
             lst = [requests,request_accepted,posts,comments,messeges,page_posts,page_comments]
             lst1 = [' New Requests',' Request Accepted',' New Posts',' New Comments',' New Messeges',' New post on\nliked page,','New comment on\npost from page.']
@@ -602,15 +602,15 @@ class GUI:
         name = customtkinter.CTkEntry(master=frame, placeholder_text=label)
         name.pack();return name 
     def create_label(root,name,r,c):
-        customtkinter.CTkLabel(root, text = name,text_font = ('ITALIC',12),text_color= ('lightblue')).grid(row=r, column=c, padx=20, pady=20)
+        customtkinter.CTkLabel(root, text = name,font = ('ITALIC',12),text_color= ('lightblue')).grid(row=r, column=c, padx=20, pady=20)
     def login_signup(self):
         PATH = os.path.dirname(os.path.realpath(__file__))
         root = GUI.create_window(self,"450x260",'Facebook')
         image_size = 20
-        add_user_image = ImageTk.PhotoImage(Image.open(PATH + "/test_images/add-user.png").resize((image_size, image_size), Image.ANTIALIAS))
-        login_image = ImageTk.PhotoImage(Image.open(PATH + "/test_images/login.png").resize((image_size, image_size), Image.ANTIALIAS))
+        add_user_image = ImageTk.PhotoImage(Image.open(PATH + "/test_images/add-user.png").resize((image_size, image_size)))
+        login_image = ImageTk.PhotoImage(Image.open(PATH + "/test_images/login.png").resize((image_size, image_size)))
         frame = GUI.create_frame(self,root)
-        customtkinter.CTkLabel(frame, text = "Welcome to Facebook",text_font = ('BOLD',13),text_color= ('lightblue')).pack()
+        customtkinter.CTkLabel(frame, text = "Welcome to Facebook",font = ('BOLD',13),text_color= ('lightblue')).pack()
         customtkinter.CTkLabel(frame, text = "By Shazam Razzaq").pack()
         username = GUI.entry(self,'Username',frame)
         pin = GUI.entry(self,'Pin',frame)
